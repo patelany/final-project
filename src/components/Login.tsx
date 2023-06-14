@@ -28,7 +28,7 @@ const Login = () => {
               alt="profile"
             />
           </p>
-          <button className="addChild">Add A Child</button>
+
           <button className="signOut" onClick={() => signOut()}>
             Sign Out
           </button>
