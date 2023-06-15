@@ -1,0 +1,4 @@
+.Home .loggedIn {
+  display: flex;
+  justify-content: space-between;
+}
