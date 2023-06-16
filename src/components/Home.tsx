@@ -9,36 +9,23 @@ import {
   getPatientByGuardian,
 } from "../services/patientApiService";
 import Patient from "../models/Patient";
+import PatientDetails from "../components/PatientDetails";
+import Trial from "../models/Trial";
+import {
+  getAllTrials,
+  getTrial,
+  getTrialByGuardian,
+} from "../services/trialApiService";
 
 const Home = () => {
   const { user } = useContext(AuthContext);
   console.log(user);
   const navigate = useNavigate();
   const [patients, setAllPatients] = useState<Patient[]>([]);
+  const [trials, setAllTrials] = useState<Trial[]>([]);
   const nameFromPathParam: string | undefined = useParams().name;
   // console.log(nameFromPathParam);
-
-  // const update = async (): Promise<void> => {
-  //   if (nameFromPathParam) {
-  //     // we're at /user/:name
-  //     const res = await getAllTrials(nameFromPathParam);
-  //     console.log(res);
-  //     setTrialsToPatient(res);
-  //   } else {
-
-  //       setTimeout(() => {
-  //         if (!user) {
-  //           navigate("/");
-  //         }
-  //       }, 1000);
-  //     }
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   // call a fn that get all so's to a particular person
-  //   update();
-  // }, [nameFromPathParam, user]);
+  console.log(trials);
   useEffect(() => {
     if (!user) {
       navigate("/Login");
@@ -47,6 +34,9 @@ const Home = () => {
         console.log("allPatients", response, user.uid);
         setAllPatients(response);
       });
+      getTrialByGuardian(user.uid!).then((response) => {
+        setAllTrials(response);
+      });
     }
   }, [user]);
 
@@ -54,12 +44,6 @@ const Home = () => {
     <main className="Home">
       <div className="loggedIn">
         <p>Welcome To Factt: {user?.displayName}</p>
-
-        {/* <img
-          className="profileImage"
-          src={user?.photoURL || ""}
-          alt="profile"
-        /> */}
 
         <button
           className="signOut"
@@ -70,7 +54,16 @@ const Home = () => {
           Sign Out
         </button>
       </div>
-
+      <ul className="fullPatientList">
+        {patients.map((item) => (
+          <PatientDetails
+            patient={item}
+            key={item._id}
+            trials={trials}
+            //this is specific to react, not the index
+          />
+        ))}
+      </ul>
       <button
         className="addChildbutton"
         onClick={() => {
@@ -78,31 +71,6 @@ const Home = () => {
         }}
       >
         Add A Child
-      </button>
-      <button
-        className="addTrialbutton"
-        onClick={() => {
-          navigate("/AddTrial");
-        }}
-      >
-        New Trial
-      </button>
-      <button
-        className="addReactionbutton"
-        onClick={() => {
-          navigate("/AddReaction");
-        }}
-      >
-        Add Reaction
-      </button>
-
-      <button
-        className="viewTrialbutton"
-        onClick={() => {
-          navigate("/");
-        }}
-      >
-        View Trial
       </button>
     </main>
   );
