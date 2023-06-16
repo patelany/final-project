@@ -21,7 +21,7 @@ function App() {
           <Route path="/Login" element={<Login />} />
           <Route path="/Home" element={<Home />} />
           <Route path="/AddChild" element={<AddChild />} />
-          <Route path="/AddTrial" element={<AddTrial />} />
+          <Route path="/AddTrial/:patientId" element={<AddTrial />} />
           <Route path="/AddReaction" element={<AddReaction />} />
           {/* <Route path="/ViewTrial" element={<ViewTrial />} /> */}
           {/*<Route path="/Trials" element={<List />} />
