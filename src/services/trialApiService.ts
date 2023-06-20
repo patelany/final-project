@@ -3,7 +3,8 @@ import Trial from "../models/Trial";
 
 const baseUrl: string = process.env.REACT_APP_API_URL || "";
 
-export const getTrial = async (id: string): Promise<Trial[]> => {
+//return one trial based on Trial object ID
+export const getTrial = async (id: string): Promise<Trial> => {
   return (await axios.get(`${baseUrl}/trials/${encodeURIComponent(id)}`)).data;
 };
 export const getAllTrials = async (): Promise<Trial[]> => {
@@ -17,5 +18,18 @@ export const addTrial = async (newTrial: Trial): Promise<Trial> => {
 export const getTrialByGuardian = async (id: string): Promise<Trial[]> => {
   return (
     await axios.get(`${baseUrl}/allTrials/trials/${encodeURIComponent(id)}`)
+  ).data;
+};
+
+export const patchTrialReaction = async (
+  trialToUpdate: string,
+  reactionID: string
+): Promise<Trial> => {
+  return (
+    await axios.patch(
+      `${baseUrl}/trial/${encodeURIComponent(
+        trialToUpdate
+      )}/reactionID/${encodeURIComponent(reactionID)}`
+    )
   ).data;
 };

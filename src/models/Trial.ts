@@ -11,5 +11,5 @@ export default interface Trial {
   food_photo_url?: string;
   start_date: Date; //current date and time
   trial_pass: string;
-  reaction?: Reaction[];
+  reaction?: string[]; //reaction object Ids
 }

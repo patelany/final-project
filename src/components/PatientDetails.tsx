@@ -32,13 +32,14 @@ const PatientDetails = ({ patient, trials }: Props) => {
             }
           })
           .map((item) => (
-            <div>
+            <div key={item._id}>
               <p>
                 {item.trial_name}
+
                 <button
                   className="addReactionbutton"
                   onClick={() => {
-                    navigate("/AddReaction");
+                    navigate(`/AddReaction/${encodeURIComponent(item._id!)}`);
                   }}
                 >
                   Add Reaction

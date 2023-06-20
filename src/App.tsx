@@ -22,7 +22,12 @@ function App() {
           <Route path="/Home" element={<Home />} />
           <Route path="/AddChild" element={<AddChild />} />
           <Route path="/AddTrial/:patientId" element={<AddTrial />} />
-          <Route path="/AddReaction" element={<AddReaction />} />
+          <Route path="/AddReaction/:id" element={<AddReaction />} />
+          <Route
+            path="/trial/:trialID/reactionID/:reactionID"
+            element={<AddReaction />}
+          />
+          <Route path="/reactions/:TrialId" element={<AddReaction />} />
           {/* <Route path="/ViewTrial" element={<ViewTrial />} /> */}
           {/*<Route path="/Trials" element={<List />} />
           <Route path="/products/:id" element={<ProductDetails />} />
