@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 const AddChildForm = () => {
   const [name, setName] = useState("");
+  const [gender, setGender] = useState("");
   // const [years, setYears] = useState("");
   // const [months, setMonths] = useState("");
   const [birthdate, setBirthdate] = useState("");
@@ -21,6 +22,7 @@ const AddChildForm = () => {
   const submitHandler = async (e: FormEvent): Promise<void> => {
     e.preventDefault();
     const newPatient: Patient = {
+      gender: gender,
       guardianID: user!.uid.toString(), //google UID
       patient_name: name,
       // age_years: +years,
@@ -43,6 +45,7 @@ const AddChildForm = () => {
     <form className="AddChildForm" onSubmit={submitHandler}>
       <label htmlFor="name">Name (nickname)</label>
       <input
+        required
         type="text"
         name="name"
         id="name"
@@ -68,12 +71,45 @@ const AddChildForm = () => {
       /> */}
       <label htmlFor="birthdate">Birthdate:</label>
       <input
+        required
         type="date"
         name="birthdate"
         id="birthdate"
         onChange={(e) => setBirthdate(e.target.value)}
         value={birthdate}
       />
+      <input
+        required
+        type="radio"
+        id="boy"
+        name="gender"
+        value="2"
+        onChange={(e) => setGender(e.target.value)}
+        checked={gender === "2"}
+      />
+      <label htmlFor="boy">boy</label>
+      <input
+        required
+        type="radio"
+        id="girl"
+        name="gender"
+        value="3"
+        onChange={(e) => setGender(e.target.value)}
+        checked={gender === "3"}
+      />
+      <label htmlFor="girl">girl</label>
+      <input
+        disabled
+        type="radio"
+        id="neutral"
+        name="neutral"
+        value="4"
+        onChange={(e) => setGender(e.target.value)}
+        checked={gender === ""}
+      />
+      <label htmlFor="neutral">prefer not to say</label>
+
+      <br></br>
       <input
         type="checkbox"
         name="shareData"

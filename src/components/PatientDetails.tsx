@@ -12,9 +12,10 @@ interface Props {
 const PatientDetails = ({ patient, trials }: Props) => {
   const navigate = useNavigate();
   return (
-    <div className="PatientDetails">
-      <li>
-        {patient.patient_name}
+    <tr>
+      <td className="PatientDetails">{patient.patient_name}</td>
+      <td>
+        {" "}
         <button
           className="addTrialbutton"
           onClick={() => {
@@ -23,7 +24,9 @@ const PatientDetails = ({ patient, trials }: Props) => {
           }}
         >
           New Trial
-        </button>
+        </button>{" "}
+      </td>
+      <td>
         {trials
           .filter((item) => {
             // return filterFavs ? item.isFavorite : item;
@@ -39,7 +42,11 @@ const PatientDetails = ({ patient, trials }: Props) => {
                 <button
                   className="addReactionbutton"
                   onClick={() => {
-                    navigate(`/AddReaction/${encodeURIComponent(item._id!)}`);
+                    navigate(
+                      `/AddReaction/${encodeURIComponent(item._id!)}/${
+                        patient.gender
+                      }`
+                    );
                   }}
                 >
                   Add Reaction
@@ -55,18 +62,17 @@ const PatientDetails = ({ patient, trials }: Props) => {
               </p>
             </div>
           ))}
-
-        {/* // .sort((a, b) => { */}
-        {/* //   if (a.start_date < b.start_date) { */}
-        {/* //     return -1;
+      </td>
+      {/* // .sort((a, b) => { */}
+      {/* //   if (a.start_date < b.start_date) { */}
+      {/* //     return -1;
           //   }
           //   if (a.start_date > b.start_date) { */}
-        {/* //     return 1;
+      {/* //     return 1;
           //   }
           //   return 0;
           // })} */}
-      </li>
-    </div>
+    </tr>
   );
 };
 
