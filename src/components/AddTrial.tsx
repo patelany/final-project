@@ -1,10 +1,12 @@
-import { FormEvent, useContext, useState } from "react";
+import { FormEvent, useContext, useRef, useState } from "react";
 import "./AddTrial.css";
 import Trial from "../models/Trial";
 import { useNavigate, useParams } from "react-router-dom";
 import { addTrial } from "../services/trialApiService";
 import PatientContext from "../context/PatientContext";
 import AuthContext from "../context/AuthContext";
+import { storage } from "../firebaseConfig";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 const AddTrial = () => {
   const navigate = useNavigate();
@@ -19,9 +21,13 @@ const AddTrial = () => {
   const { patients } = useContext(PatientContext);
   const patientId: string = useParams().patientId!;
   const { user } = useContext(AuthContext);
+  const fileUploadRef = useRef<HTMLInputElement>(null);
+
   const submitHandler = async (e: FormEvent): Promise<void> => {
     console.log("test");
     e.preventDefault();
+    const someFiles = fileUploadRef.current?.files;
+
     const newTrial: Trial = {
       guardianID: user!.uid.toString(),
       patient_id: patientId,
@@ -29,28 +35,51 @@ const AddTrial = () => {
       trial_type: typeOfTrial,
       food_type: foodType,
       trial_food: trialFood,
-      food_photo_url: "",
+      //food_photo_url: "",
       start_date: new Date(startDate),
       trial_pass: "In Process",
+
       // reaction: reaction,
     };
-    await addTrial(newTrial);
-    navigate("/Home");
-  };
 
+    if (someFiles && someFiles[0]) {
+      console.log(someFiles[0]); //
+      const newFile = someFiles[0];
+      const storageRef = ref(storage, "newFile.name");
+      //uploadBytes is async
+      uploadBytes(storageRef, newFile).then((snapshot) => {
+        getDownloadURL(snapshot.ref).then((url) => {
+          console.log(url);
+          newTrial.food_photo_url = url;
+          console.log(newTrial.food_photo_url);
+          //when the promise is returned, get download URL
+          //getDownloadURL(snapshot.ref).then((url) => console.log(url));
+          addTrial(newTrial).then(() => {
+            navigate("/Home");
+          });
+        });
+      });
+    } else {
+      addTrial(newTrial).then(() => {
+        navigate("/Home");
+      });
+    }
+  };
   return (
     <form className="AddTrialForm" onSubmit={submitHandler}>
       <label htmlFor="trial">Trial:</label>
       <input
+        required
         type="text"
         name="trial"
         id="trial"
         onChange={(e) => setTrial(e.target.value)}
         value={trial}
       />
-      <label htmlFor="startDate">Start Date:</label>
+      <label htmlFor="startDate">Start Date and Time:</label>
       <input
-        type="date"
+        required
+        type="datetime-local"
         name="startDate"
         id="startDate"
         onChange={(e) => setStartDate(e.target.value)}
@@ -86,8 +115,9 @@ const AddTrial = () => {
       >
         <option value="trialFood">Oreos use API?</option>
       </select>
+      <label htmlFor="photo">Upload a photo:</label>
+      <input type="file" name="photo" id="photo" ref={fileUploadRef} />
       <p>
-        <button>Upload Photo</button>
         Manufacturers can change ingredients at any time! Take a picture of the
         package, so you can be sure of the ingredients at time of trial!
       </p>

@@ -4,6 +4,7 @@ export default interface Patient {
   patient_name: string;
   // age_years: number;
   // age_months: number;
+  gender: string;
   birthdate: Date;
   shareData: boolean;
 }

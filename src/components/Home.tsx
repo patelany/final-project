@@ -54,16 +54,25 @@ const Home = () => {
           Sign Out
         </button>
       </div>
-      <ul className="fullPatientList">
-        {patients.map((item) => (
-          <PatientDetails
-            patient={item}
-            key={item._id}
-            trials={trials}
-            //this is specific to react, not the index
-          />
-        ))}
-      </ul>
+      <table className="fullPatientList">
+        <thead>
+          <tr>
+            <th>Name (Nickname)</th>
+            <th>Trials</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {patients.map((item) => (
+            <PatientDetails
+              patient={item}
+              key={item._id}
+              trials={trials}
+              //this is specific to react, not the index
+            />
+          ))}{" "}
+        </tbody>
+      </table>
       <button
         className="addChildbutton"
         onClick={() => {

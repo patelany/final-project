@@ -22,7 +22,7 @@ function App() {
           <Route path="/Home" element={<Home />} />
           <Route path="/AddChild" element={<AddChild />} />
           <Route path="/AddTrial/:patientId" element={<AddTrial />} />
-          <Route path="/AddReaction/:id" element={<AddReaction />} />
+          <Route path="/AddReaction/:id/:gender" element={<AddReaction />} />
           <Route
             path="/trial/:trialID/reactionID/:reactionID"
             element={<AddReaction />}
