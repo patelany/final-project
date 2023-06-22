@@ -44,6 +44,7 @@ const AddChildForm = () => {
   return (
     <form className="AddChildForm" onSubmit={submitHandler}>
       <label htmlFor="name">Name (nickname)</label>
+
       <input
         required
         type="text"
@@ -69,15 +70,17 @@ const AddChildForm = () => {
         onChange={(e) => setMonths(e.target.value)}
         value={months}
       /> */}
-      <label htmlFor="birthdate">Birthdate:</label>
-      <input
-        required
-        type="date"
-        name="birthdate"
-        id="birthdate"
-        onChange={(e) => setBirthdate(e.target.value)}
-        value={birthdate}
-      />
+      <p>
+        <label htmlFor="birthdate">Birthdate:</label>
+        <input
+          required
+          type="date"
+          name="birthdate"
+          id="birthdate"
+          onChange={(e) => setBirthdate(e.target.value)}
+          value={birthdate}
+        />
+      </p>
       <input
         required
         type="radio"

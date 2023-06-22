@@ -1,3 +1,7 @@
+.Home {
+  padding: 10px;
+}
+
 .Home .loggedIn {
   display: flex;
   justify-content: space-between;
@@ -17,4 +21,5 @@ th,
 td {
   border: 1px solid black;
   text-align: center;
+  padding: 2px;
 }

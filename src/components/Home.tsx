@@ -25,7 +25,7 @@ const Home = () => {
   const [trials, setAllTrials] = useState<Trial[]>([]);
   const nameFromPathParam: string | undefined = useParams().name;
   // console.log(nameFromPathParam);
-  console.log(trials);
+
   useEffect(() => {
     if (!user) {
       navigate("/Login");
@@ -34,6 +34,7 @@ const Home = () => {
         console.log("allPatients", response, user.uid);
         setAllPatients(response);
       });
+      console.log(patients);
       getTrialByGuardian(user.uid!).then((response) => {
         setAllTrials(response);
       });
@@ -54,24 +55,25 @@ const Home = () => {
           Sign Out
         </button>
       </div>
-      <table className="fullPatientList">
-        <thead>
-          <tr>
-            <th>Name (Nickname)</th>
-            <th>Trials</th>
-          </tr>
-        </thead>
-        <tbody>
-          {patients.map((item) => (
-            <PatientDetails
-              patient={item}
-              key={item._id}
-              trials={trials}
-              //this is specific to react, not the index
-            />
-          ))}{" "}
-        </tbody>
-      </table>
+
+      {patients.length > 0 && (
+        <div>
+          <table className="fullPatientList">
+            <thead>
+              <tr>
+                <th>Name (Nickname)</th>
+
+                <th>Existing Trials</th>
+              </tr>
+            </thead>
+            <tbody>
+              {patients.map((item) => (
+                <PatientDetails patient={item} key={item._id} trials={trials} />
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
       <button
         className="addChildbutton"
         onClick={() => {

@@ -11,20 +11,22 @@ interface Props {
 
 const PatientDetails = ({ patient, trials }: Props) => {
   const navigate = useNavigate();
+  console.log(trials);
   return (
     <tr>
-      <td className="PatientDetails">{patient.patient_name}</td>
-      <td>
-        {" "}
-        <button
-          className="addTrialbutton"
-          onClick={() => {
-            // navigate(`/AddTrial/${patient._id}`);
-            navigate(`/AddTrial/${encodeURIComponent(patient._id!)}`);
-          }}
-        >
-          New Trial
-        </button>{" "}
+      <td className="PatientDetails">
+        {patient.patient_name}
+        <p>
+          <button
+            className="addTrialbutton"
+            onClick={() => {
+              // navigate(`/AddTrial/${patient._id}`);
+              navigate(`/AddTrial/${encodeURIComponent(patient._id!)}`);
+            }}
+          >
+            New Trial
+          </button>
+        </p>
       </td>
       <td>
         {trials
@@ -37,6 +39,13 @@ const PatientDetails = ({ patient, trials }: Props) => {
           .map((item) => (
             <div key={item._id}>
               <p>
+                {item.food_photo_url && (
+                  <img
+                    className="trialFoodPhoto"
+                    src={item.food_photo_url}
+                    alt="trial food photo"
+                  />
+                )}
                 {item.trial_name}
 
                 <button

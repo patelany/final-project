@@ -45,7 +45,7 @@ const AddTrial = () => {
     if (someFiles && someFiles[0]) {
       console.log(someFiles[0]); //
       const newFile = someFiles[0];
-      const storageRef = ref(storage, "newFile.name");
+      const storageRef = ref(storage, newFile.name + newTrial.start_date);
       //uploadBytes is async
       uploadBytes(storageRef, newFile).then((snapshot) => {
         getDownloadURL(snapshot.ref).then((url) => {
@@ -67,6 +67,7 @@ const AddTrial = () => {
   };
   return (
     <form className="AddTrialForm" onSubmit={submitHandler}>
+      <h1>Add A New Trial:</h1>
       <label htmlFor="trial">Trial:</label>
       <input
         required
@@ -76,26 +77,29 @@ const AddTrial = () => {
         onChange={(e) => setTrial(e.target.value)}
         value={trial}
       />
-      <label htmlFor="startDate">Start Date and Time:</label>
-      <input
-        required
-        type="datetime-local"
-        name="startDate"
-        id="startDate"
-        onChange={(e) => setStartDate(e.target.value)}
-        value={startDate}
-      />
-      <label htmlFor="typeOfTrial">Type Of Trial:</label>
-      <select
-        name="typeOfTrial"
-        id="typeOfTrial"
-        value={typeOfTrial}
-        onChange={(e) => setTrialType(e.target.value)}
-      >
-        <option value="giveFood">Give A Food</option>
-        <option value="takeAwayFood">Take Away A Food</option>
-      </select>
-
+      <p>
+        <label htmlFor="startDate">Start Date and Time:</label>
+        <input
+          required
+          type="datetime-local"
+          name="startDate"
+          id="startDate"
+          onChange={(e) => setStartDate(e.target.value)}
+          value={startDate}
+        />
+      </p>
+      <p>
+        <label htmlFor="typeOfTrial">Type Of Trial:</label>
+        <select
+          name="typeOfTrial"
+          id="typeOfTrial"
+          value={typeOfTrial}
+          onChange={(e) => setTrialType(e.target.value)}
+        >
+          <option value="giveFood">Give A Food</option>
+          <option value="takeAwayFood">Take Away A Food</option>
+        </select>
+      </p>
       <label htmlFor="foodType">Food Type:</label>
       <select
         name="foodType"
@@ -106,15 +110,17 @@ const AddTrial = () => {
         <option value="purchased">Purchased</option>
         <option value="homeMade">Home Made</option>
       </select>
-      <label htmlFor="trialFood">Trial Food:</label>
-      <select
-        name="trialFood"
-        id="trialFood"
-        value={trialFood}
-        onChange={(e) => setTrialFood(e.target.value)}
-      >
-        <option value="trialFood">Oreos use API?</option>
-      </select>
+      <p>
+        <label htmlFor="trialFood">Trial Food:</label>
+        <select
+          name="trialFood"
+          id="trialFood"
+          value={trialFood}
+          onChange={(e) => setTrialFood(e.target.value)}
+        >
+          <option value="trialFood">API</option>
+        </select>
+      </p>
       <label htmlFor="photo">Upload a photo:</label>
       <input type="file" name="photo" id="photo" ref={fileUploadRef} />
       <p>

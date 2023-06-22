@@ -106,47 +106,59 @@ const AddReaction = () => {
     if (someFiles && someFiles[0]) {
       //console.log(someFiles[0]); //
       const newFile = someFiles[0];
-      const storageRef = ref(storage, "newFile.name");
+      const storageRef = ref(
+        storage,
+        newFile.name + newReaction.date_time_observed
+      );
       //uploadBytes is async
       uploadBytes(storageRef, newFile).then((snapshot) => {
         getDownloadURL(snapshot.ref).then((url) => {
-          //console.log(url);
           newReaction.symptom_photo_url = url;
-          //console.log(newReaction.symptom_photo_url);
-          //when the promise is returned, get download URL
-          //getDownloadURL(snapshot.ref).then((url) => console.log(url));
-          addReaction(newReaction).then(() => {
-            //navigate("/Home");
+
+          addReaction(newReaction).then((res) => {
+            if (res && oneTrial) {
+              patchTrialReaction(oneTrial._id!, res._id!).then(() => {
+                getReaction(trialId).then((resReactions) => {
+                  setReactions(resReactions);
+                });
+              });
+            }
           });
         });
       });
     } else {
-      addReaction(newReaction).then(() => {
+      addReaction(newReaction).then((res) => {
         //navigate("/Home");
+        if (res && oneTrial) {
+          patchTrialReaction(oneTrial._id!, res._id!).then(() => {
+            getReaction(trialId).then((resReactions) => {
+              setReactions(resReactions);
+            });
+          });
+          //console.log(updatedTrial);
+        }
       });
+
+      //   addReaction(newReaction).then(() => {
+      //     //navigate("/Home");
+      //   });
     }
 
     // console.log("add reaction", observedTime);
     //console.log(new Date());
 
-    const databaseReaction = await addReaction(newReaction); //create reaction in mongo
+    //const databaseReaction = await addReaction(newReaction); //create reaction in mongo
     //get reaction's object ID from mongo
 
     //associate reaction with trial
-    if (databaseReaction && oneTrial) {
-      const updatedTrial = await patchTrialReaction(
-        oneTrial._id!,
-        databaseReaction._id!
-      );
-      //console.log(updatedTrial);
-    }
+
     setChange((prev) => !prev); //set opposite of previous
   };
 
   return (
     <div>
       <form className="AddReactionForm" onSubmit={submitHandler}>
-        <p>Trial: {oneTrial && oneTrial.trial_name} </p>
+        <h1>Add Reactions For Trial: {oneTrial && oneTrial.trial_name} </h1>
         <p>
           <b>New Reaction Details:</b>
         </p>
@@ -199,15 +211,17 @@ const AddReaction = () => {
           </select>
         </p>
         <p>
-          <label htmlFor="observedTime">Date/Time Observed:</label>
-          <input
-            required
-            type="datetime-local"
-            name="observedTime"
-            id="observedTime"
-            onChange={(e) => setObservedTime(e.target.value)}
-            value={observedTime}
-          />
+          <div className="reactionDate">
+            <label htmlFor="observedTime">Date/Time Observed:</label>
+            <input
+              required
+              type="datetime-local"
+              name="observedTime"
+              id="observedTime"
+              onChange={(e) => setObservedTime(e.target.value)}
+              value={observedTime}
+            />
+          </div>
         </p>
         <p>
           <label htmlFor="photo">Uplaod a photo:</label>
@@ -225,12 +239,21 @@ const AddReaction = () => {
       >
         Back to Home
       </button>
-      <hr></hr>
-      <p>Reactions:</p>
 
+      <p>
+        <b>Reactions:</b>
+      </p>
+      <hr></hr>
       {allReactions.map((item, index) => (
         <div key={item._id}>
           <p>Reaction Number: {index + 1}</p>
+          {item.symptom_photo_url && (
+            <img
+              height="25px"
+              src={item.symptom_photo_url}
+              alt="reaction photo"
+            />
+          )}
           <p>Area of the body: {item.body_area}</p>
           <p>Symptom: {item.symptom}</p>
           <p>
