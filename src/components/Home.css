@@ -2,6 +2,19 @@
   display: flex;
   justify-content: space-between;
 }
-.Home .fullPatientList {
-  border: 5px solid black;
+/* .Home .fullPatientList {
+  border: 1px solid black;
+} */
+
+table,
+td {
+  border-collapse: collapse;
+  width: fit-content;
+}
+
+table,
+th,
+td {
+  border: 1px solid black;
+  text-align: center;
 }

@@ -16,21 +16,29 @@ import {
 } from "../services/symptomApiService";
 import BodyLocationResponse from "../models/BodyLocationResponse";
 import SpecificBodyLocationResponse from "../models/SpecificBodyLocationResponse";
+import SymptomList from "../models/SymptomList";
 
 const AddReaction = () => {
   const navigate = useNavigate();
 
+  //first drop down list
   const [bodyLocations, setBodyLocations] = useState<BodyLocationResponse[]>(
     []
   );
+  const [pickedBodyLocations, setPickedBodyLocations] = useState("");
+
+  //second drop down list
   const [specificBodyLocations, setSpecificBodyLocations] = useState<
     SpecificBodyLocationResponse[]
   >([]);
   const [pickedSpecificBodyLocations, setPickedSpecificBodyLocations] =
     useState("");
-  const [pickedBodyLocations, setPickedBodyLocations] = useState("");
-  const [oneTrial, setOneTrial] = useState<Trial | null>(null);
+
+  //third drop down - symptoms
+  const [symptomList, setsymptomList] = useState<SymptomList[]>([]);
   const [symptom, setSymptom] = useState("Rash");
+
+  const [oneTrial, setOneTrial] = useState<Trial | null>(null);
   const [observedTime, setObservedTime] = useState("");
   const [makeUpAChange, setChange] = useState(false);
   const fileUploadRef = useRef<HTMLInputElement>(null);
@@ -38,6 +46,7 @@ const AddReaction = () => {
   const trialId: string = useParams().id!;
   const gender: string = useParams().gender!;
 
+  //get the trial infomation from mongo
   useEffect(() => {
     if (trialId) {
       getTrial(trialId).then((response) => {
@@ -49,24 +58,40 @@ const AddReaction = () => {
         setReactions(resReactions);
       });
 
+      //get short list of body locations
       getBodyLocations().then((resBodyLocation) => {
-        console.log(resBodyLocation);
         setBodyLocations(resBodyLocation);
         setPickedBodyLocations(resBodyLocation[0].ID);
-      });
-      getSpecificBodyLocations(pickedBodyLocations).then(
-        (resSpecificBodyLocation) => {
-          console.log(resSpecificBodyLocation);
-          setSpecificBodyLocations(resSpecificBodyLocation);
-        }
-      );
-      getSymptomsForBodyArea("22", gender).then((resSymptoms) => {
-        console.log(resSymptoms);
       });
     }
   }, [trialId, makeUpAChange]);
 
-  console.log(pickedBodyLocations);
+  //second drop down list
+  useEffect(() => {
+    //based on body location selected, pull more specific locations
+    if (pickedBodyLocations) {
+      getSpecificBodyLocations(pickedBodyLocations).then(
+        (resSpecificBodyLocation) => {
+          //console.log(resSpecificBodyLocation);
+          setSpecificBodyLocations(resSpecificBodyLocation);
+        }
+      );
+    }
+  }, [pickedBodyLocations]);
+
+  //third drop down list
+  useEffect(() => {
+    if (pickedSpecificBodyLocations) {
+      getSymptomsForBodyArea(pickedSpecificBodyLocations, gender).then(
+        (resSymptoms) => {
+          setsymptomList(resSymptoms);
+          console.log(resSymptoms);
+        }
+      );
+    }
+  }, [pickedSpecificBodyLocations]);
+
+  //console.log(pickedBodyLocations);
 
   const submitHandler = async (e: FormEvent): Promise<void> => {
     e.preventDefault();
@@ -79,29 +104,29 @@ const AddReaction = () => {
       //display_date: dateFormat(observedTime),
     };
     if (someFiles && someFiles[0]) {
-      console.log(someFiles[0]); //
+      //console.log(someFiles[0]); //
       const newFile = someFiles[0];
       const storageRef = ref(storage, "newFile.name");
       //uploadBytes is async
       uploadBytes(storageRef, newFile).then((snapshot) => {
         getDownloadURL(snapshot.ref).then((url) => {
-          console.log(url);
+          //console.log(url);
           newReaction.symptom_photo_url = url;
-          console.log(newReaction.symptom_photo_url);
+          //console.log(newReaction.symptom_photo_url);
           //when the promise is returned, get download URL
           //getDownloadURL(snapshot.ref).then((url) => console.log(url));
           addReaction(newReaction).then(() => {
-            navigate("/Home");
+            //navigate("/Home");
           });
         });
       });
     } else {
       addReaction(newReaction).then(() => {
-        navigate("/Home");
+        //navigate("/Home");
       });
     }
 
-    console.log("add reaction", observedTime);
+    // console.log("add reaction", observedTime);
     //console.log(new Date());
 
     const databaseReaction = await addReaction(newReaction); //create reaction in mongo
@@ -113,7 +138,7 @@ const AddReaction = () => {
         oneTrial._id!,
         databaseReaction._id!
       );
-      console.log(updatedTrial);
+      //console.log(updatedTrial);
     }
     setChange((prev) => !prev); //set opposite of previous
   };
@@ -122,50 +147,57 @@ const AddReaction = () => {
     <div>
       <form className="AddReactionForm" onSubmit={submitHandler}>
         <p>Trial: {oneTrial && oneTrial.trial_name} </p>
-        <p>New Reaction:</p>
-        <label htmlFor="bodyLocations">Select Body Location:</label>
-        <select
-          name="bodyLocations"
-          id="bodyLocations"
-          onChange={(e) => setPickedBodyLocations(e.target.value)}
-          value={pickedBodyLocations}
-        >
-          {bodyLocations.map((item) => (
-            <option
-              value={item.ID}
-              key={item.ID}
-              selected={pickedBodyLocations === item.ID}
-            >
-              {item.Name}
-            </option>
-          ))}
-        </select>
-        <label htmlFor="selectSpecificLocations">
-          Select Specific Location:
-        </label>
+        <p>
+          <b>New Reaction Details:</b>
+        </p>
+        <p>
+          <label htmlFor="bodyLocations">Body Location:</label>
+          <select
+            name="bodyLocations"
+            id="bodyLocations"
+            onChange={(e) => setPickedBodyLocations(e.target.value)}
+            value={pickedBodyLocations}
+            //defaultValue={bodyLocations[1].ID}
+          >
+            {bodyLocations.map((item) => (
+              <option
+                value={item.ID}
+                key={item.ID}
+                // selected={pickedBodyLocations === item.ID}
+              >
+                {item.Name}
+              </option>
+            ))}
+          </select>
+        </p>
+        <label htmlFor="selectSpecificLocations">Specific Body Location:</label>
+        {/*do map of specific body locations*/}
         <select
           name="selectSpecificLocations"
           id="selectSpecificLocations"
           onChange={(e) => setPickedSpecificBodyLocations(e.target.value)}
         >
-          {bodyLocations.map((item) => (
+          {specificBodyLocations.map((item) => (
             <option value={item.ID} key={item.ID}>
               {item.Name}
             </option>
           ))}
         </select>
-        <br></br>
-        <label htmlFor="symptom">Symptom:</label>
-        <select
-          name="symptom"
-          id="symptom"
-          onChange={(e) => setSymptom(e.target.value)}
-          value={symptom}
-        >
-          <option value="Rash">Rash</option>
-          <option value="Swelling">Swelling</option>
-          <option value="Pain">Pain</option>
-        </select>
+        <p>
+          <label htmlFor="symptom">Symptom:</label>
+          <select
+            name="symptom"
+            id="symptom"
+            onChange={(e) => setSymptom(e.target.value)}
+            value={symptom}
+          >
+            {symptomList.map((item) => (
+              <option value={item.ID} key={item.ID}>
+                {item.Name}
+              </option>
+            ))}
+          </select>
+        </p>
         <p>
           <label htmlFor="observedTime">Date/Time Observed:</label>
           <input
@@ -201,7 +233,9 @@ const AddReaction = () => {
           <p>Reaction Number: {index + 1}</p>
           <p>Area of the body: {item.body_area}</p>
           <p>Symptom: {item.symptom}</p>
-          <p>Date Observed: {dateFormat(item.date_time_observed.toString())}</p>
+          <p>
+            Date/Time Observed: {dateFormat(item.date_time_observed.toString())}
+          </p>
           {/*<p>Time Observed: {item.date_time_observed.toLocaleTimeString()}</p>*/}
           <hr></hr>
         </div>

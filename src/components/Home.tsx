@@ -59,7 +59,6 @@ const Home = () => {
           <tr>
             <th>Name (Nickname)</th>
             <th>Trials</th>
-            <th></th>
           </tr>
         </thead>
         <tbody>
