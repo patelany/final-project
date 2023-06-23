@@ -26,6 +26,7 @@ const AddReaction = () => {
     []
   );
   const [pickedBodyLocations, setPickedBodyLocations] = useState("");
+  const [pickedBodyLocations_desc, setPickedBodyLocations_desc] = useState("");
 
   //second drop down list
   const [specificBodyLocations, setSpecificBodyLocations] = useState<
@@ -33,18 +34,25 @@ const AddReaction = () => {
   >([]);
   const [pickedSpecificBodyLocations, setPickedSpecificBodyLocations] =
     useState("");
+  const [
+    pickedSpecificBodyLocations_desc,
+    setPickedSpecificBodyLocations_desc,
+  ] = useState("");
 
   //third drop down - symptoms
   const [symptomList, setsymptomList] = useState<SymptomList[]>([]);
-  const [symptom, setSymptom] = useState("Rash");
+  const [symptom, setSymptom] = useState("");
+  const [symptom_desc, setSymptom_desc] = useState("");
 
   const [oneTrial, setOneTrial] = useState<Trial | null>(null);
   const [observedTime, setObservedTime] = useState("");
-  const [makeUpAChange, setChange] = useState(false);
   const fileUploadRef = useRef<HTMLInputElement>(null);
   const [allReactions, setReactions] = useState<Reaction[]>([]);
   const trialId: string = useParams().id!;
   const gender: string = useParams().gender!;
+  const [makeUpAChange, setChange] = useState(false);
+  const [makeUpAChange2, setChange2] = useState(false);
+  const [makeUpAChange3, setChange3] = useState(false);
 
   //get the trial infomation from mongo
   useEffect(() => {
@@ -74,10 +82,11 @@ const AddReaction = () => {
         (resSpecificBodyLocation) => {
           //console.log(resSpecificBodyLocation);
           setSpecificBodyLocations(resSpecificBodyLocation);
+          setPickedSpecificBodyLocations(resSpecificBodyLocation[0].ID);
         }
       );
     }
-  }, [pickedBodyLocations]);
+  }, [pickedBodyLocations, makeUpAChange2]);
 
   //third drop down list
   useEffect(() => {
@@ -89,7 +98,7 @@ const AddReaction = () => {
         }
       );
     }
-  }, [pickedSpecificBodyLocations]);
+  }, [pickedSpecificBodyLocations, makeUpAChange3]);
 
   //console.log(pickedBodyLocations);
 
@@ -98,8 +107,12 @@ const AddReaction = () => {
     const someFiles = fileUploadRef.current?.files;
     const newReaction: Reaction = {
       trial_id: trialId,
-      body_area: pickedBodyLocations,
-      symptom: symptom,
+      body_location_num: pickedBodyLocations,
+      body_location_desc: pickedBodyLocations_desc,
+      specific_body_location_num: pickedBodyLocations,
+      specific_body_location_desc: pickedSpecificBodyLocations_desc,
+      symptom_num: symptom,
+      symptom_desc: symptom_desc,
       date_time_observed: new Date(observedTime),
       //display_date: dateFormat(observedTime),
     };
@@ -153,8 +166,11 @@ const AddReaction = () => {
     //associate reaction with trial
 
     setChange((prev) => !prev); //set opposite of previous
+    setChange2((prev) => !prev); //set opposite of previous
+    setChange3((prev) => !prev); //set opposite of previous
   };
-
+  const test = document.querySelector("#symptom");
+  console.dir(test);
   return (
     <div>
       <form className="AddReactionForm" onSubmit={submitHandler}>
@@ -167,8 +183,14 @@ const AddReaction = () => {
           <select
             name="bodyLocations"
             id="bodyLocations"
-            onChange={(e) => setPickedBodyLocations(e.target.value)}
+            onChange={(e) => {
+              setPickedBodyLocations(e.target.value);
+              setPickedBodyLocations_desc(
+                e.target.selectedOptions[0].innerText || ""
+              );
+            }}
             value={pickedBodyLocations}
+
             //defaultValue={bodyLocations[1].ID}
           >
             {bodyLocations.map((item) => (
@@ -187,7 +209,12 @@ const AddReaction = () => {
         <select
           name="selectSpecificLocations"
           id="selectSpecificLocations"
-          onChange={(e) => setPickedSpecificBodyLocations(e.target.value)}
+          onChange={(e) => {
+            setPickedSpecificBodyLocations(e.target.value);
+            setPickedSpecificBodyLocations_desc(
+              e.target.selectedOptions[0].innerText || ""
+            );
+          }}
         >
           {specificBodyLocations.map((item) => (
             <option value={item.ID} key={item.ID}>
@@ -200,8 +227,11 @@ const AddReaction = () => {
           <select
             name="symptom"
             id="symptom"
-            onChange={(e) => setSymptom(e.target.value)}
-            value={symptom}
+            onChange={(e) => {
+              setSymptom(e.target.value);
+              setSymptom_desc(e.target.selectedOptions[0].innerText || "");
+            }}
+            //value={symptom}
           >
             {symptomList.map((item) => (
               <option value={item.ID} key={item.ID}>
@@ -254,8 +284,8 @@ const AddReaction = () => {
               alt="reaction photo"
             />
           )}
-          <p>Area of the body: {item.body_area}</p>
-          <p>Symptom: {item.symptom}</p>
+          <p>Area of the body: {item.body_location_desc}</p>
+          <p>Symptom: {item.symptom_desc}</p>
           <p>
             Date/Time Observed: {dateFormat(item.date_time_observed.toString())}
           </p>

@@ -12,7 +12,7 @@ body {
 
 .App {
   background-color: rgb(248, 235, 207);
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .App h1 {

@@ -63,7 +63,7 @@ const PatientDetails = ({ patient, trials }: Props) => {
                 <button
                   className="viewTrialbutton"
                   onClick={() => {
-                    navigate("/");
+                    navigate(`/ViewTrial/${encodeURIComponent(item._id!)}`);
                   }}
                 >
                   View Trial

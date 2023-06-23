@@ -12,6 +12,7 @@ import Home from "./components/Home";
 import AddChild from "./components/AddChild";
 import AddTrial from "./components/AddTrial";
 import AddReaction from "./components/AddReaction";
+import ViewTrial from "./components/ViewTrial";
 
 function App() {
   return (
@@ -23,6 +24,8 @@ function App() {
           <Route path="/AddChild" element={<AddChild />} />
           <Route path="/AddTrial/:patientId" element={<AddTrial />} />
           <Route path="/AddReaction/:id/:gender" element={<AddReaction />} />
+          <Route path="/ViewTrial/:id" element={<ViewTrial />} />
+
           <Route
             path="/trial/:trialID/reactionID/:reactionID"
             element={<AddReaction />}
