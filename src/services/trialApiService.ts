@@ -33,3 +33,7 @@ export const patchTrialReaction = async (
     )
   ).data;
 };
+
+export const deleteOneTrial = (id: string): Promise<void | string> => {
+  return axios.delete(`${baseUrl}/trials/${id}`).then((res) => res.data);
+};

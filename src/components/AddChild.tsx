@@ -1,9 +1,11 @@
-import { FormEvent, useContext, useEffect, useState } from "react";
+import { FormEvent, useContext, useEffect, useRef, useState } from "react";
 import "./AddChild.css";
 import Patient from "../models/Patient";
 import { addPatient } from "../services/patientApiService";
 import AuthContext from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { storage } from "../firebaseConfig";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 // interface Props {
 //   setSearchTerm: (s: string) => void;
@@ -18,20 +20,46 @@ const AddChildForm = () => {
   const [shareData, setShareData] = useState(false);
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
+  const fileUploadRef = useRef<HTMLInputElement>(null);
 
   const submitHandler = async (e: FormEvent): Promise<void> => {
     e.preventDefault();
+    const someFiles = fileUploadRef.current?.files;
+
     const newPatient: Patient = {
       gender: gender,
       guardianID: user!.uid.toString(), //google UID
       patient_name: name,
       // age_years: +years,
       // age_months: +months,
+
       birthdate: new Date(birthdate),
       shareData: shareData,
     };
-    await addPatient(newPatient);
-    navigate("/Home");
+
+    if (someFiles && someFiles[0]) {
+      console.log(someFiles[0]); //
+      const newFile = someFiles[0];
+      const storageRef = ref(storage, newFile.name + newPatient.birthdate);
+      //uploadBytes is async
+      uploadBytes(storageRef, newFile).then((snapshot) => {
+        getDownloadURL(snapshot.ref).then((url) => {
+          console.log(url);
+          newPatient.photo_url = url;
+          console.log(newPatient.photo_url);
+          //when the promise is returned, get download URL
+          //getDownloadURL(snapshot.ref).then((url) => console.log(url));
+          addPatient(newPatient).then(() => {
+            navigate("/Home");
+          });
+        });
+      });
+    } else {
+      await addPatient(newPatient).then(() => {
+        navigate("/Home");
+      });
+    }
+
     // ...
     // console.log(search);
     //setSearchTerm(search);
@@ -41,6 +69,7 @@ const AddChildForm = () => {
   //     navigate("/Home");
   //   }
   // }, [user]);
+
   return (
     <form className="AddChildForm" onSubmit={submitHandler}>
       <label htmlFor="name">Name (nickname)</label>
@@ -121,10 +150,20 @@ const AddChildForm = () => {
         onChange={(e) => setShareData(e.target.checked)}
       />
       <label htmlFor="shareData">Share your trials with others?</label>
-
+      <p></p>
+      <label htmlFor="photo">Add your adorable kid! </label>
+      <input type="file" name="photo" id="photo" ref={fileUploadRef} />
       <p>
         <button>Save</button>
       </p>
+      <button
+        className="finishedReactions"
+        onClick={() => {
+          navigate("/");
+        }}
+      >
+        Back to Home
+      </button>
     </form>
   );
 };
