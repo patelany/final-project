@@ -258,7 +258,7 @@ const AddReaction = () => {
           <input type="file" name="photo" id="photo" ref={fileUploadRef} />
         </p>
         <p>
-          <button>Save</button>
+          <button className="saveReactionBtn">Save</button>
         </p>
       </form>
       <button

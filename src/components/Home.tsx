@@ -41,6 +41,12 @@ const Home = () => {
     }
   }, [user]);
 
+  const update = () => {
+    getTrialByGuardian(user?.uid!).then((response) => {
+      setAllTrials(response);
+    });
+  };
+
   return (
     <main className="Home">
       <div className="loggedIn">
@@ -57,7 +63,7 @@ const Home = () => {
       </div>
 
       {patients.length > 0 && (
-        <div>
+        <div className="tableDiv">
           <table className="fullPatientList">
             <thead>
               <tr>
@@ -68,7 +74,12 @@ const Home = () => {
             </thead>
             <tbody>
               {patients.map((item) => (
-                <PatientDetails patient={item} key={item._id} trials={trials} />
+                <PatientDetails
+                  patient={item}
+                  key={item._id}
+                  trials={trials}
+                  update={update}
+                />
               ))}
             </tbody>
           </table>

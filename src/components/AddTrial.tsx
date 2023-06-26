@@ -66,71 +66,81 @@ const AddTrial = () => {
     }
   };
   return (
-    <form className="AddTrialForm" onSubmit={submitHandler}>
-      <h1>Add A New Trial:</h1>
-      <label htmlFor="trial">Trial:</label>
-      <input
-        required
-        type="text"
-        name="trial"
-        id="trial"
-        onChange={(e) => setTrial(e.target.value)}
-        value={trial}
-      />
-      <p>
-        <label htmlFor="startDate">Start Date and Time:</label>
+    <div>
+      <form className="AddTrialForm" onSubmit={submitHandler}>
+        <h1>Add A New Trial:</h1>
+        <label htmlFor="trial">Trial:</label>
         <input
           required
-          type="datetime-local"
-          name="startDate"
-          id="startDate"
-          onChange={(e) => setStartDate(e.target.value)}
-          value={startDate}
+          type="text"
+          name="trial"
+          id="trial"
+          onChange={(e) => setTrial(e.target.value)}
+          value={trial}
         />
-      </p>
-      <p>
-        <label htmlFor="typeOfTrial">Type Of Trial:</label>
+        <p>
+          <label htmlFor="startDate">Start Date and Time:</label>
+          <input
+            required
+            type="datetime-local"
+            name="startDate"
+            id="startDate"
+            onChange={(e) => setStartDate(e.target.value)}
+            value={startDate}
+          />
+        </p>
+        <p>
+          <label htmlFor="typeOfTrial">Type Of Trial:</label>
+          <select
+            name="typeOfTrial"
+            id="typeOfTrial"
+            value={typeOfTrial}
+            onChange={(e) => setTrialType(e.target.value)}
+          >
+            <option value="giveFood">Give A Food</option>
+            <option value="takeAwayFood">Take Away A Food</option>
+          </select>
+        </p>
+        <label htmlFor="foodType">Food Type:</label>
         <select
-          name="typeOfTrial"
-          id="typeOfTrial"
-          value={typeOfTrial}
-          onChange={(e) => setTrialType(e.target.value)}
+          name="foodType"
+          id="foodType"
+          value={foodType}
+          onChange={(e) => setFoodType(e.target.value)}
         >
-          <option value="giveFood">Give A Food</option>
-          <option value="takeAwayFood">Take Away A Food</option>
+          <option value="purchased">Purchased</option>
+          <option value="homeMade">Home Made</option>
         </select>
-      </p>
-      <label htmlFor="foodType">Food Type:</label>
-      <select
-        name="foodType"
-        id="foodType"
-        value={foodType}
-        onChange={(e) => setFoodType(e.target.value)}
+        <p>
+          <label htmlFor="trialFood">Trial Food:</label>
+          <select
+            name="trialFood"
+            id="trialFood"
+            value={trialFood}
+            onChange={(e) => setTrialFood(e.target.value)}
+          >
+            <option value="trialFood">API</option>
+          </select>
+        </p>
+        <label htmlFor="photo">Upload a photo:</label>
+        <input type="file" name="photo" id="photo" ref={fileUploadRef} />
+        <p>
+          Manufacturers can change ingredients at any time! Take a picture of
+          the package, so you can be sure of the ingredients at time of trial!
+        </p>
+        <p>
+          <button className="trialSaveBtn">Save</button>
+        </p>
+      </form>
+      <button
+        className="finished"
+        onClick={() => {
+          navigate("/");
+        }}
       >
-        <option value="purchased">Purchased</option>
-        <option value="homeMade">Home Made</option>
-      </select>
-      <p>
-        <label htmlFor="trialFood">Trial Food:</label>
-        <select
-          name="trialFood"
-          id="trialFood"
-          value={trialFood}
-          onChange={(e) => setTrialFood(e.target.value)}
-        >
-          <option value="trialFood">API</option>
-        </select>
-      </p>
-      <label htmlFor="photo">Upload a photo:</label>
-      <input type="file" name="photo" id="photo" ref={fileUploadRef} />
-      <p>
-        Manufacturers can change ingredients at any time! Take a picture of the
-        package, so you can be sure of the ingredients at time of trial!
-      </p>
-      <p>
-        <button>Save</button>
-      </p>
-    </form>
+        Back to Home
+      </button>
+    </div>
   );
 };
 

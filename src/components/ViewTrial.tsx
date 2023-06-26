@@ -35,45 +35,45 @@ const ViewTrial = () => {
   };
 
   return (
-    <form className="ViewTrialForm" onSubmit={submitHandler}>
-      <table className="TrialDetails">
-        <thead>
-          <tr>
-            <th>
-              <h1>Trial Details: {oneTrial && oneTrial.trial_name} </h1>
-              <label htmlFor="passFail">Trial Status:</label>
-              <select
-                name="passFail"
-                id="passFail"
-                value={passFail}
-                onChange={(e) => setPassFail(e.target.value)}
-              >
-                <option value="inprocess">In Process</option>
-                <option value="pass">Pass</option>
-                <option value="fail">Fail</option>
-              </select>
-              <h2>Trial Type : {oneTrial && oneTrial.trial_type} </h2>
-              <h2>Food Type: {oneTrial && oneTrial.food_type} </h2>
-              <h2>Specific Food Given: {oneTrial && oneTrial.trial_food} </h2>
-              <h2>
-                Trial Start Date:
-                {oneTrial && dateFormat(oneTrial.start_date.toString())}
-              </h2>
-
-              {oneTrial && oneTrial.food_photo_url && (
-                <img
-                  height="50px"
-                  src={oneTrial.food_photo_url}
-                  alt="reaction photo"
-                />
-              )}
-            </th>
-          </tr>
-        </thead>
-
-        {allReactions.map((item, index) => (
-          <div key={item._id}>
+    <div>
+      <form className="ViewTrialForm" onSubmit={submitHandler}>
+        <table className="TrialDetails">
+          <thead>
             <tr>
+              <th>
+                <h1>Trial Details: {oneTrial && oneTrial.trial_name} </h1>
+                <label htmlFor="passFail">Trial Status:</label>
+                <select
+                  name="passFail"
+                  id="passFail"
+                  value={passFail}
+                  onChange={(e) => setPassFail(e.target.value)}
+                >
+                  <option value="inprocess">In Process</option>
+                  <option value="pass">Pass</option>
+                  <option value="fail">Fail</option>
+                </select>
+                <h2>Trial Type : {oneTrial && oneTrial.trial_type} </h2>
+                <h2>Food Type: {oneTrial && oneTrial.food_type} </h2>
+                <h2>Specific Food Given: {oneTrial && oneTrial.trial_food} </h2>
+                <h2>
+                  Trial Start Date:
+                  {oneTrial && dateFormat(oneTrial.start_date.toString())}
+                </h2>
+
+                {oneTrial && oneTrial.food_photo_url && (
+                  <img
+                    height="50px"
+                    src={oneTrial.food_photo_url}
+                    alt="reaction photo"
+                  />
+                )}
+              </th>
+            </tr>
+          </thead>
+
+          {allReactions.map((item, index) => (
+            <tr className="trReactions" key={item._id}>
               <td>
                 <p>Reaction Number: {index + 1}</p>
                 {item.symptom_photo_url && (
@@ -91,12 +91,20 @@ const ViewTrial = () => {
                 </p>
               </td>
             </tr>
-          </div>
-        ))}
-      </table>
+          ))}
+        </table>
 
-      {/* <h1>Trial Details: {oneTrial && oneTrial.food_photo_url} </h1> */}
-    </form>
+        {/* <h1>Trial Details: {oneTrial && oneTrial.food_photo_url} </h1> */}
+      </form>
+      <button
+        className="finished"
+        onClick={() => {
+          navigate("/");
+        }}
+      >
+        Back to Home
+      </button>
+    </div>
   );
 };
 
