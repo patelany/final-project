@@ -7,6 +7,7 @@ import AuthContext from "../context/AuthContext";
 import { getReaction } from "../services/reactionApiService";
 import Reaction from "../models/Reaction";
 import dateFormat from "../utils/helperFunctions";
+import Email from "./Email";
 
 const ViewTrial = () => {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ const ViewTrial = () => {
   const { user } = useContext(AuthContext);
   const [allReactions, setReactions] = useState<Reaction[]>([]);
   const [passFail, setPassFail] = useState("in process");
+  const [emailForm, setEmailForm] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -78,12 +80,13 @@ const ViewTrial = () => {
                 <p>Reaction Number: {index + 1}</p>
                 {item.symptom_photo_url && (
                   <img
+                    className="symptomPhoto"
                     //height="25px"
                     src={item.symptom_photo_url}
                     alt="reaction photo"
                   />
                 )}
-                <p>Area of the body: {item.body_location_desc}</p>
+                <p>Area of the body: {item.specific_body_location_desc}</p>
                 <p>Symptom: {item.symptom_desc}</p>
                 <p>
                   Date/Time Observed:{" "}
@@ -97,6 +100,13 @@ const ViewTrial = () => {
         {/* <h1>Trial Details: {oneTrial && oneTrial.food_photo_url} </h1> */}
       </form>
       <button
+        onClick={() => {
+          setEmailForm(true);
+        }}
+      >
+        Email To Doctor
+      </button>
+      <button
         className="finished"
         onClick={() => {
           navigate("/");
@@ -104,6 +114,7 @@ const ViewTrial = () => {
       >
         Back to Home
       </button>
+      {emailForm && <Email trial={oneTrial} reactions={allReactions} />}
     </div>
   );
 };

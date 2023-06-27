@@ -55,3 +55,27 @@
 
   border: 0;
 }
+
+.reactionList {
+  width: 85%;
+}
+
+.reactionPage {
+  padding: 25px;
+}
+
+h1 {
+  margin-bottom: 10px;
+}
+
+input {
+  margin-bottom: 10px;
+}
+
+select {
+  margin-bottom: 10px;
+}
+
+.reactionsTitle {
+  margin: 10px 0px;
+}
