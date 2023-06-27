@@ -26,7 +26,9 @@ const AddReaction = () => {
     []
   );
   const [pickedBodyLocations, setPickedBodyLocations] = useState("");
-  const [pickedBodyLocations_desc, setPickedBodyLocations_desc] = useState("");
+  const [pickedBodyLocations_desc, setPickedBodyLocations_desc] = useState(
+    "Abdomen, pelvis & buttocks"
+  );
 
   //second drop down list
   const [specificBodyLocations, setSpecificBodyLocations] = useState<
@@ -37,12 +39,12 @@ const AddReaction = () => {
   const [
     pickedSpecificBodyLocations_desc,
     setPickedSpecificBodyLocations_desc,
-  ] = useState("");
+  ] = useState("Abdomen");
 
   //third drop down - symptoms
   const [symptomList, setsymptomList] = useState<SymptomList[]>([]);
   const [symptom, setSymptom] = useState("");
-  const [symptom_desc, setSymptom_desc] = useState("");
+  const [symptom_desc, setSymptom_desc] = useState("Abdominal pain");
 
   const [oneTrial, setOneTrial] = useState<Trial | null>(null);
   const [observedTime, setObservedTime] = useState("");
@@ -172,12 +174,9 @@ const AddReaction = () => {
   const test = document.querySelector("#symptom");
   console.dir(test);
   return (
-    <div>
+    <div className="reactionPage">
       <form className="AddReactionForm" onSubmit={submitHandler}>
         <h1>Add Reactions For Trial: {oneTrial && oneTrial.trial_name} </h1>
-        <p>
-          <b>New Reaction Details:</b>
-        </p>
         <p>
           <label htmlFor="bodyLocations">Body Location:</label>
           <select
@@ -243,6 +242,7 @@ const AddReaction = () => {
         <p>
           <div className="reactionDate">
             <label htmlFor="observedTime">Date/Time Observed:</label>
+            <p></p>
             <input
               required
               type="datetime-local"
@@ -270,12 +270,12 @@ const AddReaction = () => {
         Back to Home
       </button>
 
-      <p>
+      <p className="reactionsTitle">
         <b>Reactions:</b>
       </p>
-      <hr></hr>
+
       {allReactions.map((item, index) => (
-        <div key={item._id}>
+        <div key={item._id} className="reactionList">
           <p>Reaction Number: {index + 1}</p>
           {item.symptom_photo_url && (
             <img
@@ -284,7 +284,7 @@ const AddReaction = () => {
               alt="reaction photo"
             />
           )}
-          <p>Area of the body: {item.body_location_desc}</p>
+          <p>Area of the body: {item.specific_body_location_desc}</p>
           <p>Symptom: {item.symptom_desc}</p>
           <p>
             Date/Time Observed: {dateFormat(item.date_time_observed.toString())}

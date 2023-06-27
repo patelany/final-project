@@ -13,6 +13,7 @@ import AddChild from "./components/AddChild";
 import AddTrial from "./components/AddTrial";
 import AddReaction from "./components/AddReaction";
 import ViewTrial from "./components/ViewTrial";
+import Email from "./components/Email";
 
 function App() {
   return (

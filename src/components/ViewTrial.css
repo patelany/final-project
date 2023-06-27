@@ -28,3 +28,11 @@
 .ViewTrialForm {
   margin: 5px;
 }
+
+.symptomPhoto {
+  height: 80px;
+}
+
+h2 {
+  margin-bottom: 10px;
+}

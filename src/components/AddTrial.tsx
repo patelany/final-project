@@ -66,7 +66,7 @@ const AddTrial = () => {
     }
   };
   return (
-    <div>
+    <div className="trialPage">
       <form className="AddTrialForm" onSubmit={submitHandler}>
         <h1>Add A New Trial:</h1>
         <label htmlFor="trial">Trial:</label>
@@ -124,7 +124,7 @@ const AddTrial = () => {
         </p>
         <label htmlFor="photo">Upload a photo:</label>
         <input type="file" name="photo" id="photo" ref={fileUploadRef} />
-        <p>
+        <p className="photoDesc">
           Manufacturers can change ingredients at any time! Take a picture of
           the package, so you can be sure of the ingredients at time of trial!
         </p>
