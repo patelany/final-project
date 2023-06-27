@@ -16,3 +16,7 @@ export const getPatientByGuardian = async (id: string): Promise<Patient[]> => {
     await axios.get(`${baseUrl}/allPatients/guardian/${encodeURIComponent(id)}`)
   ).data;
 };
+
+export const deleteOneChild = (id: string): Promise<void | string> => {
+  return axios.delete(`${baseUrl}/patient/${id}`).then((res) => res.data);
+};

@@ -4,7 +4,7 @@ import AuthContext from "../context/AuthContext";
 import Icon from "@mdi/react";
 import { mdiNotebookEditOutline } from "@mdi/js";
 import { signInWithGoogle, signOut } from "../firebaseConfig";
-import noteBook from "../images/noteBook.png";
+import noteBook from "../images/notebook.png";
 import "./Login.css";
 
 const Login = () => {

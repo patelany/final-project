@@ -47,6 +47,12 @@ const Home = () => {
     });
   };
 
+  const updatePatient = () => {
+    getPatientByGuardian(user?.uid!).then((response) => {
+      setAllPatients(response);
+    });
+  };
+
   return (
     <main className="Home">
       <div className="loggedIn">
@@ -79,6 +85,7 @@ const Home = () => {
                   key={item._id}
                   trials={trials}
                   update={update}
+                  updatePatient={updatePatient}
                 />
               ))}
             </tbody>

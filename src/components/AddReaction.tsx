@@ -121,7 +121,7 @@ const AddReaction = () => {
       const newFile = someFiles[0];
       const storageRef = ref(
         storage,
-        newFile.name + newReaction.date_time_observed
+        newReaction.date_time_observed + newFile.name
       );
       //uploadBytes is async
       uploadBytes(storageRef, newFile).then((snapshot) => {

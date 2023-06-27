@@ -40,7 +40,7 @@ const AddChildForm = () => {
     if (someFiles && someFiles[0]) {
       console.log(someFiles[0]); //
       const newFile = someFiles[0];
-      const storageRef = ref(storage, newFile.name + newPatient.birthdate);
+      const storageRef = ref(storage, newPatient.birthdate + newFile.name);
       //uploadBytes is async
       uploadBytes(storageRef, newFile).then((snapshot) => {
         getDownloadURL(snapshot.ref).then((url) => {
@@ -152,9 +152,15 @@ const AddChildForm = () => {
       <label htmlFor="shareData">Share your trials with others?</label>
       <p></p>
       <label htmlFor="photo">Add your adorable kid! </label>
-      <input type="file" name="photo" id="photo" ref={fileUploadRef} />
+      <input
+        className="childPhotoButton"
+        type="file"
+        name="photo"
+        id="photo"
+        ref={fileUploadRef}
+      />
       <p>
-        <button>Save</button>
+        <button className="saveChildButton">Save</button>
       </p>
       <button
         className="finishedReactions"

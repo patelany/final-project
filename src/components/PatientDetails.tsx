@@ -8,19 +8,28 @@ import {
   getTrialByGuardian,
 } from "../services/trialApiService";
 import AuthContext from "../context/AuthContext";
+import { deleteOneChild } from "../services/patientApiService";
 
 interface Props {
   patient: Patient;
   trials: Trial[];
   update: () => void;
+  updatePatient: () => void;
 }
 
-const PatientDetails = ({ patient, trials, update }: Props) => {
+const PatientDetails = ({ patient, trials, update, updatePatient }: Props) => {
   const { user } = useContext(AuthContext);
   const deleteHandler = (id: string): void => {
     deleteOneTrial(id).then((res) => {
       console.log(res);
       update();
+    });
+  };
+
+  const deleteHandlerChild = (id: string): void => {
+    deleteOneChild(id).then((res) => {
+      console.log(res);
+      updatePatient();
     });
   };
   const navigate = useNavigate();
@@ -49,6 +58,18 @@ const PatientDetails = ({ patient, trials, update }: Props) => {
             New Trial
           </button>
         </p>
+        <button
+          className="deleteChildButton"
+          onClick={
+            () => {
+              alert("Are you sure?");
+              deleteHandlerChild(patient._id!);
+            }
+            // setChange((prev) => !prev);
+          }
+        >
+          Delete
+        </button>
       </td>
       <td>
         {trials
@@ -90,6 +111,7 @@ const PatientDetails = ({ patient, trials, update }: Props) => {
                 View Trial
               </button>
               <button
+                className="deleteTrialButton"
                 onClick={
                   () => {
                     alert("Are you sure?");

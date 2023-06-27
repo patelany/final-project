@@ -45,7 +45,7 @@ const AddTrial = () => {
     if (someFiles && someFiles[0]) {
       console.log(someFiles[0]); //
       const newFile = someFiles[0];
-      const storageRef = ref(storage, newFile.name + newTrial.start_date);
+      const storageRef = ref(storage, newTrial.start_date + newFile.name);
       //uploadBytes is async
       uploadBytes(storageRef, newFile).then((snapshot) => {
         getDownloadURL(snapshot.ref).then((url) => {
