@@ -18,6 +18,7 @@ const AddChildForm = () => {
   // const [months, setMonths] = useState("");
   const [birthdate, setBirthdate] = useState("");
   const [shareData, setShareData] = useState(false);
+  const [hipaa, setHipaa] = useState(false);
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const fileUploadRef = useRef<HTMLInputElement>(null);
@@ -149,7 +150,20 @@ const AddChildForm = () => {
         checked={shareData}
         onChange={(e) => setShareData(e.target.checked)}
       />
-      <label htmlFor="shareData">Share your trials with others?</label>
+      <label htmlFor="shareData">
+        Share your trials with others? Your data will remain anonymous.
+      </label>
+      <p></p>
+      <input
+        type="checkbox"
+        name="HIPAA"
+        id="HIPAA"
+        checked={hipaa}
+        onChange={(e) => setHipaa(e.target.checked)}
+      />
+      <label htmlFor="HIPAA">
+        I understand that this app is not HIPAA compliant.
+      </label>
       <p></p>
       <label htmlFor="photo">Add your adorable kid! </label>
       <input

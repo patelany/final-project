@@ -1,4 +1,4 @@
-import { FormEvent, useContext, useRef, useState } from "react";
+import { FormEvent, useContext, useEffect, useRef, useState } from "react";
 import "./AddTrial.css";
 import Trial from "../models/Trial";
 import { useNavigate, useParams } from "react-router-dom";
@@ -7,21 +7,34 @@ import PatientContext from "../context/PatientContext";
 import AuthContext from "../context/AuthContext";
 import { storage } from "../firebaseConfig";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { getFood } from "../services/foodApiService";
+import FoodResponse from "../models/FoodResponse";
+// import SearchBar from "./SearchBar";
 
 const AddTrial = () => {
   const navigate = useNavigate();
   const [trial, setTrial] = useState("");
   const [typeOfTrial, setTrialType] = useState("giveFood");
   const [foodType, setFoodType] = useState("purchased");
-  const [trialFood, setTrialFood] = useState("");
+  const [trialFood, setTrialFood] = useState("oreo");
   // const [foodPhoto, setFoodPhoto] = useState("");
   const [startDate, setStartDate] = useState("");
   // const [trialStatus, setTrialStatus] = useState("In Process");
   const [reaction, setReaction] = useState([]);
+  const [foodSearchResults, setFoodSearchResults] = useState<FoodResponse[]>(
+    []
+  );
   const { patients } = useContext(PatientContext);
   const patientId: string = useParams().patientId!;
   const { user } = useContext(AuthContext);
   const fileUploadRef = useRef<HTMLInputElement>(null);
+  console.log(trialFood);
+  useEffect(() => {
+    getFood(trialFood).then((response) => {
+      setFoodSearchResults(response);
+    });
+  }, [trialFood]);
+  console.log(foodSearchResults);
 
   const submitHandler = async (e: FormEvent): Promise<void> => {
     console.log("test");
@@ -113,14 +126,18 @@ const AddTrial = () => {
         </select>
         <p>
           <label htmlFor="trialFood">Trial Food:</label>
-          <select
+          {/* <SearchBar
+            placeholder="Enter Food..."
+            data={foodSearchResults[1].branded}
+          /> */}
+          {/* <select
             name="trialFood"
             id="trialFood"
             value={trialFood}
             onChange={(e) => setTrialFood(e.target.value)}
           >
             <option value="trialFood">API</option>
-          </select>
+          </select> */}
         </p>
         <label htmlFor="photo">Upload a photo:</label>
         <input type="file" name="photo" id="photo" ref={fileUploadRef} />
