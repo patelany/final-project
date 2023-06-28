@@ -1,7 +1,7 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import "./ViewTrial.css";
 import { FormEvent, useContext, useEffect, useState } from "react";
-import { getTrial } from "../services/trialApiService";
+import { getTrial, patchTrialStatus } from "../services/trialApiService";
 import Trial from "../models/Trial";
 import AuthContext from "../context/AuthContext";
 import { getReaction } from "../services/reactionApiService";
@@ -31,6 +31,9 @@ const ViewTrial = () => {
       });
     }
   }, []);
+  useEffect(() => {
+    patchTrialStatus(trialIdFromPathParam!, passFail).then((response) => {});
+  }, [passFail]);
 
   const submitHandler = async (e: FormEvent): Promise<void> => {
     e.preventDefault();
@@ -51,10 +54,18 @@ const ViewTrial = () => {
                   value={passFail}
                   onChange={(e) => setPassFail(e.target.value)}
                 >
-                  <option value="inprocess">In Process</option>
+                  <option value="in process">In Process</option>
                   <option value="pass">Pass</option>
                   <option value="fail">Fail</option>
                 </select>
+
+                {/* <button
+                  onClick={() => {
+                    setEmailForm(true);
+                  }}
+                >
+                  Save Status
+                </button> */}
                 <h2>Trial Type : {oneTrial && oneTrial.trial_type} </h2>
                 <h2>Food Type: {oneTrial && oneTrial.food_type} </h2>
                 <h2>Specific Food Given: {oneTrial && oneTrial.trial_food} </h2>

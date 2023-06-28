@@ -68,3 +68,10 @@
   font-size: 9px;
   border: 0;
 }
+.trialInfo {
+  display: flex;
+  flex-direction: column;
+}
+.trialNameInfo {
+  margin-bottom: 20px;
+}

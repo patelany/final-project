@@ -46,6 +46,7 @@ const PatientDetails = ({ patient, trials, update, updatePatient }: Props) => {
     <tr>
       <td className="PatientDetails">
         <img className="patientPhoto" src={patient.photo_url} />
+        <p></p>
         {patient.patient_name}
         <p>
           <button
@@ -88,8 +89,15 @@ const PatientDetails = ({ patient, trials, update, updatePatient }: Props) => {
                   alt="trial food photo"
                 />
               )}
-              {item.trial_name}
-
+              <div className="trialInfo">
+                <div className="trialNameInfo">
+                  {item.trial_name} Trial <p></p>
+                </div>
+                <div className="trialStatusInfo">
+                  Status:<p></p>
+                  {item.trial_pass}
+                </div>
+              </div>
               <button
                 className="addReactionbutton"
                 onClick={() => {

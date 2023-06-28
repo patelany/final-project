@@ -46,7 +46,13 @@
   font-family: "Montserrat", sans-serif;
 }
 
-@media only screen and (min-width: 375px) {
-  /* 481px — 768px: iPads, Tablets. 
+@media only screen and (min-width: 481px) {
+  .App {
+    font-size: x-large;
+    /* 481px — 768px: iPads, Tablets. 
   Mobile devices: 320px-480px */
+  }
+  .App button {
+    font-size: large;
+  }
 }
