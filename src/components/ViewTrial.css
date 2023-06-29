@@ -1,4 +1,5 @@
-.finished {
+.finished,
+.emailDr {
   color: #fff;
   padding: 5px 8px;
   background-color: #1565c0;
@@ -35,4 +36,9 @@
 
 h2 {
   margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.tableHead {
+  margin-top: 15px;
 }

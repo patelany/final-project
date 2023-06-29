@@ -33,7 +33,7 @@ const PatientDetails = ({ patient, trials, update, updatePatient }: Props) => {
     });
   };
   const navigate = useNavigate();
-  console.log(trials);
+  //console.log(trials);
   // const [makeUpAChange, setChange] = useState(false);
   // useEffect(() => {
   //   getTrialByGuardian(user?.uid!).then((response) => {
@@ -90,9 +90,7 @@ const PatientDetails = ({ patient, trials, update, updatePatient }: Props) => {
                 />
               )}
               <div className="trialInfo">
-                <div className="trialNameInfo">
-                  {item.trial_name} Trial <p></p>
-                </div>
+                <div className="trialNameInfo">{item.trial_name} Trial</div>
                 <div className="trialStatusInfo">
                   Status:<p></p>
                   {item.trial_pass}

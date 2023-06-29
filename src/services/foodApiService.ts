@@ -17,3 +17,21 @@ export const getFood = (query: string): Promise<any> => {
       return res.data;
     }); // .data is specific to axios (returns JSON response)
 };
+
+export const getNutritionFacts = (nixItemID: string): Promise<any> => {
+  const headers = {
+    "x-app-id": "da2df0ba",
+    "x-app-key": "74f415d5045d41936dad3eaa2bd55cd9",
+  };
+
+  return axios
+    .get("https://trackapi.nutritionix.com/v2/search/item", {
+      headers,
+      params: {
+        nix_item_id: nixItemID,
+      },
+    })
+    .then((res) => {
+      return res.data;
+    }); // .data is specific to axios (returns JSON response)
+};

@@ -7,38 +7,50 @@ import PatientContext from "../context/PatientContext";
 import AuthContext from "../context/AuthContext";
 import { storage } from "../firebaseConfig";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { getFood } from "../services/foodApiService";
+import { getFood, getNutritionFacts } from "../services/foodApiService";
 import FoodResponse from "../models/FoodResponse";
+import FoodIngredientResponse from "../models/FoodIngredientResponse";
 // import SearchBar from "./SearchBar";
 
 const AddTrial = () => {
   const navigate = useNavigate();
   const [trial, setTrial] = useState("");
-  const [typeOfTrial, setTrialType] = useState("giveFood");
+  const [typeOfTrial, setTrialType] = useState("Give A Food");
   const [foodType, setFoodType] = useState("purchased");
-  const [trialFood, setTrialFood] = useState("oreo");
+  const [trialFood, setTrialFood] = useState("");
   // const [foodPhoto, setFoodPhoto] = useState("");
   const [startDate, setStartDate] = useState("");
   // const [trialStatus, setTrialStatus] = useState("In Process");
   const [reaction, setReaction] = useState([]);
-  const [foodSearchResults, setFoodSearchResults] = useState<FoodResponse[]>(
-    []
-  );
+  const [foodSearchResults, setFoodSearchResults] = useState<FoodResponse>();
   const { patients } = useContext(PatientContext);
   const patientId: string = useParams().patientId!;
   const { user } = useContext(AuthContext);
   const fileUploadRef = useRef<HTMLInputElement>(null);
-  console.log(trialFood);
+
+  const [nutritionDetails, setNutritionDetails] =
+    useState<FoodIngredientResponse>();
+
+  let nixID: string | undefined = "";
+
+  // //console.log(trialFood);
   useEffect(() => {
-    getFood(trialFood).then((response) => {
-      setFoodSearchResults(response);
-    });
-  }, [trialFood]);
-  console.log(foodSearchResults);
+    if (foodSearchResults?.branded[0].nix_item_id) {
+      nixID = foodSearchResults?.branded[0].nix_item_id;
+
+      getNutritionFacts(nixID!).then((facts) => {
+        setNutritionDetails(facts);
+      });
+    }
+  }, [foodSearchResults]);
+
+  // console.log(nutritionDetails);
+  // console.log(nutritionDetails?.foods[0].nf_ingredient_statement);
 
   const submitHandler = async (e: FormEvent): Promise<void> => {
-    console.log("test");
+    //console.log("test");
     e.preventDefault();
+    console.log(new Date(new Date(startDate).getTime()));
     const someFiles = fileUploadRef.current?.files;
 
     const newTrial: Trial = {
@@ -49,22 +61,21 @@ const AddTrial = () => {
       food_type: foodType,
       trial_food: trialFood,
       //food_photo_url: "",
-      start_date: new Date(startDate),
+      start_date: new Date(new Date(startDate).getTime() - 14400000),
       trial_pass: "In Process",
-
-      // reaction: reaction,
+      nutrition_info: nutritionDetails?.foods[0].nf_ingredient_statement,
     };
 
     if (someFiles && someFiles[0]) {
-      console.log(someFiles[0]); //
+      // console.log(someFiles[0]); //
       const newFile = someFiles[0];
       const storageRef = ref(storage, newTrial.start_date + newFile.name);
       //uploadBytes is async
       uploadBytes(storageRef, newFile).then((snapshot) => {
         getDownloadURL(snapshot.ref).then((url) => {
-          console.log(url);
+          //console.log(url);
           newTrial.food_photo_url = url;
-          console.log(newTrial.food_photo_url);
+          //console.log(newTrial.food_photo_url);
           //when the promise is returned, get download URL
           //getDownloadURL(snapshot.ref).then((url) => console.log(url));
           addTrial(newTrial).then(() => {
@@ -78,6 +89,18 @@ const AddTrial = () => {
       });
     }
   };
+
+  const nutritionFacts = (): void => {
+    //call the nutritionFact api with nixID
+
+    if (trialFood.length > 0) {
+      getFood(trialFood).then((response) => {
+        setFoodSearchResults(response);
+        console.log(response);
+      });
+    }
+  };
+
   return (
     <div className="trialPage">
       <form className="AddTrialForm" onSubmit={submitHandler}>
@@ -126,6 +149,31 @@ const AddTrial = () => {
         </select>
         <p>
           <label htmlFor="trialFood">Trial Food:</label>
+          <input
+            required
+            type="text"
+            name="trialFood"
+            id="trialFood"
+            onChange={(e) => setTrialFood(e.target.value)}
+            value={trialFood}
+          />
+          <button
+            type="button"
+            className="showNutrition"
+            onClick={() => {
+              nutritionFacts();
+            }}
+          >
+            Select Food
+          </button>
+          {nutritionDetails && (
+            <div className="showIngredients">
+              <h3>Ingredients are subject to change!</h3>
+              Ingredients List:{" "}
+              {nutritionDetails?.foods[0].nf_ingredient_statement}
+              <p></p>
+            </div>
+          )}
           {/* <SearchBar
             placeholder="Enter Food..."
             data={foodSearchResults[1].branded}

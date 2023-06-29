@@ -26,7 +26,8 @@
 }
 
 .trialPage {
-  padding: 40px;
+  padding: 30px;
+  padding-left: 20px;
 }
 
 .photoDesc {
@@ -43,4 +44,8 @@ input {
 
 select {
   margin-bottom: 10px;
+}
+
+.showIngredients {
+  width: 90%;
 }
