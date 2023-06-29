@@ -4,7 +4,7 @@ import React, { FormEvent, useRef } from "react";
 import emailjs from "@emailjs/browser";
 import Trial from "../models/Trial";
 import Reaction from "../models/Reaction";
-import dateFormat from "../utils/helperFunctions";
+import { dateFormat } from "../utils/helperFunctions";
 
 interface Props {
   trial: Trial | null;
@@ -43,9 +43,10 @@ const Email = ({ trial, reactions }: Props) => {
         trialObj.trial_pass
       } \n Trial Type: ${trialObj.trial_type} \n Food Type: ${
         trialObj.food_type
-      } \n Specific Food Given: ${
-        trialObj.trial_food
-      } \n Trial Start Date: ${dateFormat(
+      } \n Specific Food Given: ${trialObj.trial_food} 
+      \n Food Ingredients: ${
+        trialObj.nutrition_info
+      }\n Trial Start Date: ${dateFormat(
         trialObj.start_date.toString()
       )} \n ${reactions.map(
         (reaction, index) =>

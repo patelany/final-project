@@ -6,7 +6,6 @@ import Trial from "../models/Trial";
 import Reaction from "../models/Reaction";
 import { addReaction, getReaction } from "../services/reactionApiService";
 import { useNavigate } from "react-router-dom";
-import dateFormat from "../utils/helperFunctions";
 import { storage } from "../firebaseConfig";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import {
@@ -17,6 +16,7 @@ import {
 import BodyLocationResponse from "../models/BodyLocationResponse";
 import SpecificBodyLocationResponse from "../models/SpecificBodyLocationResponse";
 import SymptomList from "../models/SymptomList";
+import { dateFormat } from "../utils/helperFunctions";
 
 const AddReaction = () => {
   const navigate = useNavigate();
@@ -115,7 +115,8 @@ const AddReaction = () => {
       specific_body_location_desc: pickedSpecificBodyLocations_desc,
       symptom_num: symptom,
       symptom_desc: symptom_desc,
-      date_time_observed: new Date(observedTime),
+      date_time_observed: new Date(new Date(observedTime).getTime() - 14400000),
+
       //display_date: dateFormat(observedTime),
     };
     if (someFiles && someFiles[0]) {

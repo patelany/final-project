@@ -19,7 +19,7 @@ import {
 
 const Home = () => {
   const { user } = useContext(AuthContext);
-  console.log(user);
+  //console.log(user);
   const navigate = useNavigate();
   const [patients, setAllPatients] = useState<Patient[]>([]);
   const [trials, setAllTrials] = useState<Trial[]>([]);
@@ -31,10 +31,10 @@ const Home = () => {
       navigate("/Login");
     } else {
       getPatientByGuardian(user.uid!).then((response) => {
-        console.log("allPatients", response, user.uid);
+        // console.log("allPatients", response, user.uid);
         setAllPatients(response);
       });
-      console.log(patients);
+      //console.log(patients);
       getTrialByGuardian(user.uid!).then((response) => {
         setAllTrials(response);
       });
